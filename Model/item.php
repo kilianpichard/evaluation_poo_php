@@ -1,6 +1,6 @@
 <?php
 
-require('payable.php');
+namespace Model;
 
 class Item extends Payable
 {
@@ -30,6 +30,11 @@ class Item extends Payable
     public function toString()
     {
         return $this->name . ': ' . number_format(floatval($this->price / 100), 2) . '€';
+    }
+
+    public function getWeight()
+    {
+        return $this->weight;
     }
 
     public function taxRatePerThousands()

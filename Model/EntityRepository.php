@@ -41,38 +41,35 @@ class EntityRepository
         return $this->pdo;
     }
 
-    public function getAllEmployees(): array
+    public function addItemCart($name)
     {
-        $query = $this->getPdo()->query("SELECT * FROM $this->table");
-        $employees = $query->fetchAll(PDO::FETCH_ASSOC);
-        return $employees;
+        echo $name;
+        $id = $this->getPdo()->prepare("SELECT id FROM item WHERE name = :name");
+        $id->bindValue(':name', $name);
+        $id->execute();
+        $id = $id->fetch(PDO::FETCH_ASSOC)['id'];
+        echo ($id);
     }
 
-    public function getEmployeeById($id): array
+    public function getAllItems(): array
     {
-        $query = $this->getPdo()->query("SELECT * FROM $this->table WHERE id" . ucfirst($this->table) . "=" . (int) $id);
-        $employee = $query->fetch(\PDO::FETCH_ASSOC);
-        return $employee;
+        $query = $this->getPdo()->query("SELECT * FROM item");
+        $items = $query->fetchAll(PDO::FETCH_ASSOC);
+        $entityItems = [];
+        foreach ($items as $item) {
+            $entityItems[] = new Item($item['name'], $item['price'], $item['weight']);
+        }
+        return $entityItems;
     }
 
-    public function saveEntityRepo()
+    public function getAllFreshItems(): array
     {
-    }
-
-    public function select(): string
-    {
-        return "Select one employee";
-    }
-
-    public function delete(): string
-    {
-        return "Delete an employee";
-    }
-
-    public function getFields(): array
-    {
-        $query = $this->getPdo()->query("DESC $this->table");
-        $fields = $query->fetchAll(PDO::FETCH_ASSOC);
-        return $fields;
+        $query = $this->getPdo()->query("SELECT * FROM freshitem");
+        $freshItems = $query->fetchAll(PDO::FETCH_ASSOC);
+        $entityFreshItems = [];
+        foreach ($freshItems as $freshItem) {
+            $entityFreshItems[] = new FreshItem($freshItem['name'], $freshItem['price'], $freshItem['weight'], $freshItem['dlc']);
+        }
+        return $entityFreshItems;
     }
 }

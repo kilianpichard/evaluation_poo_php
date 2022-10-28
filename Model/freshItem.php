@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class FreshItem extends Item
 {
     public $bestBeforeDate;

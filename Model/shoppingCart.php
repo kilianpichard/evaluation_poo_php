@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class ShoppingCart
 {
     private $items = array();

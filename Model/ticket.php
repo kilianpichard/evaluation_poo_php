@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class Ticket extends Payable
 {
     public $reference;
