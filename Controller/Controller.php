@@ -66,7 +66,7 @@ class Controller
         try {
             switch ($action) {
                 case 'add':
-                    $this->addItem($_GET['item']);
+                    $this->addItem($_GET['table'], $_GET['item']);
                     break;
                 case 'update':
                     return $this->save($action);
@@ -88,17 +88,9 @@ class Controller
         }
     }
 
-    public function addItem($name)
+    public function addItem($table, $name)
     {
-        echo "ok";
-        $items = $this->dbEntityRepository->getAllItems();
-        foreach ($items as $item) {
-            if ($item->getName() == $name) {
-                $this->shoppingCart->addItem($item);
-            }
-        }
-        // get id from item 
-        $result = $this->dbEntityRepository->addItemCart($name);
+        $result = $this->dbEntityRepository->addItemCart($table, $name);
         echo $result;
         $this->selectAll();
     }
@@ -125,6 +117,7 @@ class Controller
                 'title' => 'Items',
                 'items' => $this->dbEntityRepository->getAllItems(),
                 'freshItems' => $this->dbEntityRepository->getAllFreshItems(),
+                'tickets' => $this->dbEntityRepository->getAllTickets(),
                 'cart' => $this->shoppingCart,
             ]
         );
