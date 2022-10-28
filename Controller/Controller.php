@@ -16,47 +16,9 @@ class Controller
         $this->dbEntityRepository = new Model\EntityRepository;
 
         $shoppingCart = new Model\ShoppingCart();
-
-        $item1 = new Model\Item('Bread', 100, 500);
-        $item2 = new Model\Item('Milk', 200, 1000);
-        $item3 = new Model\Item('Butter', 300, 250);
-        $item4 = new Model\Item('Eggs', 400, 100);
-        $item5 = new Model\Item('Cheese', 500, 500);
-
-        $freshItem1 = new Model\FreshItem('Salmon', 600, 1000, '2019-12-31');
-        $freshItem2 = new Model\FreshItem('Tuna', 700, 1000, '2019-12-31');
-        $freshItem3 = new Model\FreshItem('Sardines', 800, 1000, '2019-12-31');
-        $freshItem4 = new Model\FreshItem('Sausages', 900, 1000, '2019-12-31');
-
-        $shoppingCart->addItem($item1);
-        $shoppingCart->addItem($item2);
-        $shoppingCart->addItem($item3);
-        $shoppingCart->addItem($item4);
-        $shoppingCart->addItem($item5);
-
-        $shoppingCart->addItem($freshItem1);
-        $shoppingCart->addItem($freshItem2);
-        $shoppingCart->addItem($freshItem3);
-        $shoppingCart->addItem($freshItem4);
-
-        $shoppingCart->removeItems($item2);
-
-
-
-        $ticket1 = new Model\Ticket('Coldplay Concert', 7900);
-
-
-        $shoppingCart->addItem($ticket1);
-
-        $invoice1 = new Model\Invoice();
-
-        $cartItems = $shoppingCart->getItems();
-        foreach ($cartItems as $item) {
-            $invoice1->addPayable($item);
-        }
+        $shoppingCart->addItem(new Model\Item(1, 'Bread', 100, 100));
 
         $this->shoppingCart = $shoppingCart;
-        $this->invoice = $invoice1;
     }
 
     public function handleRequest()
@@ -68,16 +30,9 @@ class Controller
                 case 'add':
                     $this->addItem($_GET['table'], $_GET['item']);
                     break;
-                case 'update':
-                    return $this->save($action);
+                case 'panier':
+                    return $this->cart();
                     break;
-                case 'select':
-                    return $this->select();
-                    break;
-                case 'delete':
-                    return $this->delete();
-                    break;
-
                 default:
                     return $this->selectAll();
                     break;
@@ -88,10 +43,10 @@ class Controller
         }
     }
 
-    public function addItem($table, $name)
+    public function addItem($table, $id)
     {
-        $result = $this->dbEntityRepository->addItemCart($table, $name);
-        echo $result;
+        $result = $this->dbEntityRepository->addItemCart($table, $id);
+        $this->shoppingCart = $result;
         $this->selectAll();
     }
 
@@ -118,43 +73,22 @@ class Controller
                 'items' => $this->dbEntityRepository->getAllItems(),
                 'freshItems' => $this->dbEntityRepository->getAllFreshItems(),
                 'tickets' => $this->dbEntityRepository->getAllTickets(),
-                'cart' => $this->shoppingCart,
+                'cart' => $this->dbEntityRepository->getCart(),
             ]
         );
     }
 
-    public function save($userChoice)
+
+    public function cart()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : NULL;
-        $data = ($userChoice === 'update') ? $this->dbEntityRepository->getFields() : NULL;
-        if ($_POST) {
-            $this->dbEntityRepository->saveEntityRepo($id);
-            header('Location: index.php');
-            exit;
-        }
+        $cart = $this->dbEntityRepository->getCart();
 
         $this->render(
             'layout.php',
-            'contact_form.php',
+            'ShoppingCart.php',
             [
-                'title' => 'Manage employees',
-                'data' => $data,
-                'fields' => $this->dbEntityRepository->getFields(),
-                'id' => 'id' . ucfirst($this->dbEntityRepository->table),
-            ]
-        );
-    }
-
-    public function select()
-    {
-        $id = isset($_GET['id']) ? $_GET['id'] : NULL;
-
-        $this->render(
-            'layout.php',
-            'employee.php',
-            [
-                'title' => 'Personnnal informations of ',
-                'data' => $this->dbEntityRepository->getEmployeeById($id),
+                'title' => 'Panier',
+                'cart' => $cart,
             ]
         );
     }

@@ -8,7 +8,6 @@ class Invoice
 
     public function __construct()
     {
-        echo 'Invoice created.<br>';
     }
 
     public function addPayable($payable)

@@ -19,7 +19,7 @@
                 <td><?= $item->getWeight() ?>g</td>
                 <td><?= number_format(floatval($item->cost() / 100), 2) . '€' ?></td>
                 <td><?= number_format(floatval($item->cost() * (1 + ($item->taxRatePerThousands() / 1000)) / 100), 2) . '€' ?></td>
-                <td><a href="?action=add&table=item&item=<?= $item->label() ?>" class="btn btn-success">Ajouter</a></td>
+                <td><a href="?action=add&table=item&item=<?= $item->id ?>" class="btn btn-success">Ajouter</a></td>
             </tr>
         <?php endforeach; ?>
     </tbody>
@@ -46,7 +46,7 @@
                 <td><?= number_format(floatval($item->cost() / 100), 2) . '€' ?></td>
                 <td><?= number_format(floatval($item->cost() * (1 + ($item->taxRatePerThousands() / 1000)) / 100), 2) . '€' ?></td>
                 <td><?= date("D d M Y", strtotime($item->getBestBeforeDate())) ?></td>
-                <td><a href="?action=add&table=freshitem&item=<?= $item->label() ?>" class="btn btn-success">Ajouter</a></td>
+                <td><a href="?action=add&table=freshitem&item=<?= $item->id ?>" class="btn btn-success">Ajouter</a></td>
             </tr>
         <?php endforeach; ?>
     </tbody>
@@ -68,7 +68,7 @@
                 <td><?= $item->label() ?></td>
                 <td><?= number_format(floatval($item->cost() / 100), 2) . '€' ?></td>
                 <td><?= number_format(floatval($item->cost() * (1 + ($item->taxRatePerThousands() / 1000)) / 100), 2) . '€' ?></td>
-                <td><a href="?action=add&table=ticket&item=<?= $item->label() ?>" class="btn btn-success">Ajouter</a></td>
+                <td><a href="?action=add&table=ticket&item=<?= $item->id ?>" class="btn btn-success">Ajouter</a></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

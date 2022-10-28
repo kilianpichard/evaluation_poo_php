@@ -4,14 +4,16 @@ namespace Model;
 
 class Item extends Payable
 {
+    public $id;
     public $name;
     public $price;
     public $weight;
     public $taxRate = 1000;
 
-    public function __construct($name, $price, $weight)
+    public function __construct($id, $name, $price, $weight)
     {
         parent::__construct($name, $price);
+        $this->id = $id;
         $this->name = $name;
         $this->price = $price;
         $this->weight = $weight;
