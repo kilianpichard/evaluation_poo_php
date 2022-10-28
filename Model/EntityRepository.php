@@ -41,14 +41,59 @@ class EntityRepository
         return $this->pdo;
     }
 
-    public function addItemCart($name)
+    public function addItemCart($table, $id)
     {
-        echo $name;
-        $id = $this->getPdo()->prepare("SELECT id FROM item WHERE name = :name");
-        $id->bindValue(':name', $name);
-        $id->execute();
-        $id = $id->fetch(PDO::FETCH_ASSOC)['id'];
-        echo ($id);
+        $idCart = 1;
+        $result = $this->getPdo()->prepare("INSERT INTO cart_items (idCart, idItem,cat) VALUES (:idCart, :idItem, :table)");
+        $result->bindValue(':idCart', $idCart);
+        $result->bindValue(':idItem', $id);
+        $result->bindValue(':table', $table);
+        $result->execute();
+        $cart = $this->getPdo()->prepare("SELECT * FROM cart_items WHERE idCart = $idCart");
+        $cart->execute();
+        $cart = $cart->fetch(PDO::FETCH_ASSOC)['*'];
+        return $cart;
+    }
+
+    public function getCart()
+    {
+        $idCart = 1;
+        $cart = $this->getPdo()->query("SELECT * FROM cart_items WHERE idCart = $idCart");
+        $cart = $cart->fetchAll(PDO::FETCH_ASSOC);
+
+        $items = $this->getAllItems();
+        $freshItems = $this->getAllFreshItems();
+        $tickets = $this->getAllTickets();
+
+
+
+        $finalCart = new ShoppingCart();
+
+        foreach ($cart as $cartItem) {
+            if ($cartItem['cat'] == 'item') {
+                foreach ($items as $i) {
+                    if ($i->id == $cartItem['idItem']) {
+                        $finalCart->addItem($i);
+                    }
+                }
+            }
+            if ($cartItem['cat'] == 'freshitem') {
+                foreach ($freshItems as $i) {
+                    if ($i->id == $cartItem['idItem']) {
+                        $finalCart->addItem($i);
+                    }
+                }
+            }
+            if ($cartItem['cat'] == 'ticket') {
+                foreach ($tickets as $i) {
+                    if ($i->id == $cartItem['idItem']) {
+                        $finalCart->addItem($i);
+                    }
+                }
+            }
+        }
+
+        return $finalCart;
     }
 
     public function getAllItems(): array
@@ -57,9 +102,20 @@ class EntityRepository
         $items = $query->fetchAll(PDO::FETCH_ASSOC);
         $entityItems = [];
         foreach ($items as $item) {
-            $entityItems[] = new Item($item['name'], $item['price'], $item['weight']);
+            $entityItems[] = new Item($item['id'], $item['name'], $item['price'], $item['weight']);
         }
         return $entityItems;
+    }
+
+    public function getAllTickets(): array
+    {
+        $query = $this->getPdo()->query("SELECT * FROM ticket");
+        $tickets = $query->fetchAll(PDO::FETCH_ASSOC);
+        $entityTickets = [];
+        foreach ($tickets as $ticket) {
+            $entityTickets[] = new Ticket($ticket['id'], $ticket['reference'], $ticket['price']);
+        }
+        return $entityTickets;
     }
 
     public function getAllFreshItems(): array
@@ -68,7 +124,7 @@ class EntityRepository
         $freshItems = $query->fetchAll(PDO::FETCH_ASSOC);
         $entityFreshItems = [];
         foreach ($freshItems as $freshItem) {
-            $entityFreshItems[] = new FreshItem($freshItem['name'], $freshItem['price'], $freshItem['weight'], $freshItem['dlc']);
+            $entityFreshItems[] = new FreshItem($freshItem['id'], $freshItem['name'], $freshItem['price'], $freshItem['weight'], $freshItem['dlc']);
         }
         return $entityFreshItems;
     }

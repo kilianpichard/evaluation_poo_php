@@ -7,14 +7,13 @@ class ShoppingCart
     private $items = array();
     private static $id = 0;
     private $weight = 0;
-    private static $maxWeight = 10000;
+    private static $maxWeight = 1000000000;
 
     public function __construct()
     {
         //create a unique id begein with 1 and increment by 1
         self::$id++;
         $this->id = self::$id;
-        echo "<br>Shopping cart " . $this->id . " created.<br>";
     }
 
     public function addItem($item)
@@ -24,9 +23,9 @@ class ShoppingCart
                 $this->items[] = $item;
                 $this->weight += $item->weight;
             } else {
-                throw new Exception('The item ' . $item->name . ' is too heavy for the shopping cart.');
+                throw new \Exception("The weight of the cart is too heavy.");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'Caught exception: ' .  $e->getMessage();
         }
     }

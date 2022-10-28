@@ -4,13 +4,16 @@ namespace Model;
 
 class Ticket extends Payable
 {
+    public $id;
     public $reference;
     public $price;
     public $taxRate = 2500;
 
-    public function __construct($reference, $price)
+    public function __construct($id, $reference, $price)
     {
+
         parent::__construct($reference, $price);
+        $this->id = $id;
         $this->reference = $reference;
         $this->price = $price;
     }
