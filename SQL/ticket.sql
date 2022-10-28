@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 28 oct. 2022 à 12:52
+-- Généré le : ven. 28 oct. 2022 à 14:34
 -- Version du serveur : 5.7.34
 -- Version de PHP : 7.4.21
 
@@ -24,39 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `item`
+-- Structure de la table `ticket`
 --
 
-CREATE TABLE `item` (
+CREATE TABLE `ticket` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `price` float NOT NULL,
-  `weight` float NOT NULL
+  `reference` varchar(100) NOT NULL,
+  `price` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `item`
+-- Déchargement des données de la table `ticket`
 --
 
-INSERT INTO `item` (`id`, `name`, `price`, `weight`) VALUES
-(1, 'Milk', 1200, 1000),
-(2, 'Butter', 999, 500),
-(3, 'Cheese', 750, 750),
-(4, 'Yogurt', 1249, 1200),
-(5, 'Ice Cream', 1999, 3000),
-(6, 'Sour Cream', 1299, 2000),
-(7, 'Cottage Cheese', 1350, 7000),
-(8, 'Cream Cheese', 450, 8000),
-(9, 'Whipped Cream', 250, 9000);
+INSERT INTO `ticket` (`id`, `reference`, `price`) VALUES
+(1, 'Coldplay', 7900),
+(2, 'ACDC', 1500);
 
 --
 -- Index pour les tables déchargées
 --
 
 --
--- Index pour la table `item`
+-- Index pour la table `ticket`
 --
-ALTER TABLE `item`
+ALTER TABLE `ticket`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -64,10 +56,10 @@ ALTER TABLE `item`
 --
 
 --
--- AUTO_INCREMENT pour la table `item`
+-- AUTO_INCREMENT pour la table `ticket`
 --
-ALTER TABLE `item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `ticket`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

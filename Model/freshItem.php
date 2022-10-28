@@ -6,9 +6,9 @@ class FreshItem extends Item
 {
     public $bestBeforeDate;
 
-    public function __construct($name, $price, $weight, $bestBeforeDate)
+    public function __construct($id, $name, $price, $weight, $bestBeforeDate)
     {
-        parent::__construct($name, $price, $weight);
+        parent::__construct($id, $name, $price, $weight);
         $this->bestBeforeDate = $bestBeforeDate;
     }
 
